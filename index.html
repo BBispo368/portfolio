@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Breno Bispo · Portfólio</title>
+  <meta name="description" content="Sistemas web, apps Android e automações sob medida para empresas e clientes." />
+  <meta property="og:title" content="Breno Bispo · Portfólio" />
+  <meta property="og:description" content="Sistemas, apps e automações que tiram empresas da planilha e do papel." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#18181a" />
+  <link rel="alternate" hreflang="pt-BR" href="?lang=pt" />
+  <link rel="alternate" hreflang="en" href="?lang=en" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23ff6a1a'/><text x='50' y='66' font-size='46' text-anchor='middle' fill='%2318181a' font-family='Arial' font-weight='800'>BB</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#projetos" data-i18n="nav.skip"></a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="mark" aria-label="Breno Bispo">BB</a>
+      <nav class="links">
+        <a href="#projetos" data-i18n="nav.work"></a>
+        <a href="#processo" data-i18n="nav.process"></a>
+        <a href="#sobre" data-i18n="nav.about"></a>
+        <a href="#contato" data-i18n="nav.contact"></a>
+      </nav>
+      <div class="controls">
+        <div class="lang" role="group" data-i18n-aria="nav.lang">
+          <button type="button" data-lang="pt">PT</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <button type="button" class="theme" id="themeToggle" data-i18n-aria="nav.theme">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <h1 class="name" aria-label="Breno Bispo"><span>Breno</span><span>Bispo</span></h1>
+      <div class="hero-row">
+        <div class="hero-copy">
+          <p class="role" data-i18n="hero.role"></p>
+          <p class="statement" data-i18n="hero.statement"></p>
+          <div class="actions">
+            <a class="btn btn-accent" href="#contato" data-i18n="hero.ctaContact"></a>
+            <a class="btn btn-quiet" href="#projetos" data-i18n="hero.ctaWork"></a>
+          </div>
+        </div>
+        <figure class="portrait">
+          <div class="photo" id="photo"></div>
+          <figcaption><span><span class="live" aria-hidden="true"></span><span data-i18n="hero.status"></span></span><span class="muted" data-bind="location"></span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="wrap section" id="projetos">
+      <div class="section-head">
+        <h2 data-i18n="work.title"></h2>
+        <p class="lede" id="workIntro"></p>
+      </div>
+      <div class="tabs" id="filters" role="group"></div>
+      <div class="bento" id="bento"></div>
+      <p class="note" data-i18n="work.note"></p>
+    </section>
+
+    <section class="wrap section" id="processo">
+      <div class="section-head">
+        <h2 data-i18n="process.title"></h2>
+      </div>
+      <ol class="steps" id="steps"></ol>
+    </section>
+
+    <section class="wrap section" id="ferramentas">
+      <div class="section-head">
+        <h2 data-i18n="stack.title"></h2>
+        <p class="lede" data-i18n="stack.intro"></p>
+      </div>
+      <ul class="tools" id="tools"></ul>
+    </section>
+
+    <section class="wrap section two-col" id="sobre">
+      <div>
+        <h2 data-i18n="about.title"></h2>
+        <div class="about-text" id="aboutText"></div>
+      </div>
+      <div class="faq">
+        <h2 data-i18n="faq.title"></h2>
+        <div id="faqList"></div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="contato">
+      <div class="contact">
+        <h2 data-i18n="contact.title"></h2>
+        <p data-i18n="contact.text"></p>
+        <div class="actions" id="contactActions"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <span>© <span id="year"></span> <span data-bind="name"></span></span>
+    <a href="#top" data-i18n="footer.top"></a>
+  </footer>
+
+  <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+    <div class="sheet-inner">
+      <button type="button" class="close" id="sheetClose" data-i18n-aria="work.close">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div id="sheetBody"></div>
+    </div>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/projects.en.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
