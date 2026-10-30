@@ -17,3 +17,11 @@ Botões PT/EN no topo. Links diretos: `?lang=pt` e `?lang=en`. Sem parâmetro, u
 1. Crie o repositório `portfolio` em github.com/BBispo368 e envie esta pasta.
 2. Settings → Pages → Branch `main` / root.
 3. O site fica em `https://bbispo368.github.io/portfolio/`.
+
+## Trabalhar em mais de um computador
+Primeira vez em um computador novo:
+```bash
+git clone https://github.com/BBispo368/portfolio.git
+```
+Ao começar a trabalhar: `git pull`
+Ao terminar: `git add . && git commit -m "o que mudou" && git push`
