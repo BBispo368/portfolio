@@ -18,9 +18,17 @@
   const fill = (s, vars) => s.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
   const cats = () => (lang === "en" ? window.CATEGORIES_EN : window.CATEGORIES);
   const tr = (p) => (lang === "en" && window.PROJECTS_EN[p.id] ? { ...p, ...window.PROJECTS_EN[p.id] } : p);
+  const loc = (v) => (typeof v === "string" ? v : (v && v[lang]) || "");
 
   const ordered = [...P].sort((a, b) => (b.highlight ? 1 : 0) - (a.highlight ? 1 : 0));
   let active = "all";
+  let expanded = false;
+
+  // Movimento: mesma curva em toda a interface; sem deslocamento para quem pede menos movimento
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const EASE = "cubic-bezier(0.2, 0.7, 0.1, 1)";
+  // O Safari só aplica :active no toque se houver um listener de touchstart
+  document.addEventListener("touchstart", () => {}, { passive: true });
 
   // Mini-ilustrações por categoria (traço = cor do texto, detalhe = destaque)
   const ART = {
@@ -36,6 +44,8 @@
     document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
     document.title = t.meta.title;
     document.querySelector('meta[name="description"]').content = t.meta.description;
+    const canonical = document.querySelector('link[rel="canonical"]');
+    canonical.href = `${canonical.href.split("?")[0]}?lang=${lang}`;
     document.querySelectorAll("[data-i18n]").forEach((el) => (el.textContent = get(el.dataset.i18n) || ""));
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => el.setAttribute("aria-label", get(el.dataset.i18nAria)));
     document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === lang));
@@ -43,6 +53,8 @@
     $("#aboutText").innerHTML = t.about.text.map((p) => `<p>${esc(p)}</p>`).join("");
     $("#faqList").innerHTML = t.faq.items.map((f) => `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("");
     $("#steps").innerHTML = t.process.steps.map((s) => `<li><h3>${esc(s.name)}</h3><p>${esc(s.text)}</p></li>`).join("");
+    renderTimeline();
+    renderTestimonials();
     renderContact();
     renderTools();
     renderFilters();
@@ -57,6 +69,27 @@
   $("#year").textContent = new Date().getFullYear();
   const initials = C.name.split(" ").map((w) => w[0]).slice(0, 2).join("");
   $("#photo").innerHTML = C.photo ? `<img src="${esc(C.photo)}" alt="${esc(C.name)}" />` : initials;
+
+  // Trajetória, currículo e depoimentos só aparecem quando preenchidos em config.js
+  function renderTimeline() {
+    const items = C.timeline || [];
+    const list = $("#timeline");
+    list.hidden = !items.length;
+    list.innerHTML = items
+      .map((i) => `<li><span class="period">${esc(i.period)}</span><div><strong>${esc(loc(i.title))}</strong>${loc(i.place) ? `<span class="muted">${esc(loc(i.place))}</span>` : ""}</div></li>`)
+      .join("");
+    const cv = loc(C.cv);
+    const action = $("#cvAction");
+    action.hidden = !cv;
+    action.innerHTML = cv ? `<a class="btn btn-quiet" href="${esc(cv)}" download>${esc(T().about.cv)}</a>` : "";
+  }
+  function renderTestimonials() {
+    const items = C.testimonials || [];
+    $("#depoimentos").hidden = !items.length;
+    $("#quotes").innerHTML = items
+      .map((q) => `<figure><blockquote>${esc(loc(q.quote))}</blockquote><figcaption><strong>${esc(q.author)}</strong>${loc(q.role) ? `<span class="muted">${esc(loc(q.role))}</span>` : ""}</figcaption></figure>`)
+      .join("");
+  }
 
   function renderContact() {
     const t = T().contact;
@@ -93,17 +126,47 @@
   }
   $("#filters").addEventListener("click", (e) => {
     const b = e.target.closest("[data-cat]");
-    if (!b) return;
+    if (!b || b.dataset.cat === active) return;
     active = b.dataset.cat;
-    renderFilters();
-    renderBento();
+    // Atualiza sem recriar os botões, para o foco do teclado continuar no filtro
+    document.querySelectorAll("#filters [data-cat]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    moveBento();
   });
+  $("#moreBtn").addEventListener("click", (e) => {
+    expanded = !expanded;
+    moveBento();
+    e.currentTarget.scrollIntoView({ block: "nearest" });
+  });
+
+  // Cada card sai da posição atual na tela até a nova; quem entra ou viajaria mais de uma tela surge com fade
+  function moveBento() {
+    const tiles = () => [...$("#bento").children];
+    const before = new Map(tiles().map((el) => [el.dataset.id, el.getBoundingClientRect()]));
+    renderBento();
+    tiles().forEach((el) => {
+      const was = before.get(el.dataset.id);
+      const now = el.getBoundingClientRect();
+      const near = was && Math.abs(was.top - now.top) < window.innerHeight;
+      if (calm.matches) {
+        if (!was) el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200 });
+      } else if (near) {
+        el.animate([{ transform: `translate(${was.left - now.left}px, ${was.top - now.top}px)` }, { transform: "none" }], { duration: 300, easing: EASE });
+      } else {
+        el.animate([{ opacity: 0, transform: "scale(0.97)" }, { opacity: 1, transform: "none" }], { duration: 300, easing: EASE });
+      }
+    });
+  }
 
   // ───────── Bento de projetos
   function renderBento() {
     const t = T().work;
     const c = cats();
-    const list = ordered.filter((p) => active === "all" || p.category === active).map(tr);
+    const matches = ordered.filter((p) => active === "all" || p.category === active);
+    // Em "Todos", começa só com os destaques; as categorias mostram tudo
+    const collapsible = active === "all" && matches.some((p) => !p.highlight);
+    const list = (collapsible && !expanded ? matches.filter((p) => p.highlight) : matches).map(tr);
+    $("#moreWrap").hidden = !collapsible;
+    $("#moreBtn").textContent = expanded ? t.showLess : fill(t.showMore, { n: matches.length - list.length });
     // Destaques alternam entre bloco grande (2x2) e largo (2x1) para formar o mosaico
     let feat = 0;
     $("#bento").innerHTML = list
@@ -125,13 +188,63 @@
 
   // ───────── Painel de detalhe
   const sheet = $("#sheet");
-  function openProject(id) {
+  let sheetTile = null;
+  let closing = false;
+  // Estado fechado do painel: reduzido e posicionado sobre o card de origem
+  function sheetHidden() {
+    if (calm.matches || !sheetTile) return { opacity: 0 };
+    const a = sheetTile.getBoundingClientRect();
+    const b = sheet.getBoundingClientRect();
+    const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+    const dy = a.top + a.height / 2 - (b.top + b.height / 2);
+    return { opacity: 0, transform: `translate(${dx}px, ${dy}px) scale(${a.width / b.width})` };
+  }
+  function stopSheetMotion() {
+    sheet.getAnimations({ subtree: false }).forEach((x) => x.cancel());
+    document.getAnimations().filter((x) => x.effect.pseudoElement === "::backdrop").forEach((x) => x.cancel());
+  }
+  function showSheet() {
+    sheet.showModal();
+    sheet.scrollTop = 0;
+    sheet.animate([sheetHidden(), { opacity: 1, transform: "none" }], { duration: 320, easing: EASE });
+    sheet.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: EASE, pseudoElement: "::backdrop" });
+  }
+  // Volta ao card pelo mesmo caminho, partindo do valor atual na tela (funciona mesmo no meio da abertura)
+  function closeSheet() {
+    if (closing || !sheet.open) return;
+    closing = true;
+    const now = getComputedStyle(sheet);
+    const from = { opacity: now.opacity, transform: now.transform };
+    const backdrop = getComputedStyle(sheet, "::backdrop").opacity;
+    const hidden = sheetHidden();
+    stopSheetMotion();
+    const options = { duration: 200, easing: EASE, fill: "forwards" };
+    sheet.animate([{ opacity: backdrop }, { opacity: 0 }], { ...options, pseudoElement: "::backdrop" });
+    sheet.animate([from, hidden], options).onfinish = () => sheet.close();
+  }
+  sheet.addEventListener("close", () => {
+    closing = false;
+    stopSheetMotion();
+    linkProject(null);
+  });
+  // O projeto aberto fica na URL (?projeto=id), para enviar direto a alguém
+  function linkProject(id) {
+    const url = new URL(location.href);
+    if (id) url.searchParams.set("projeto", id);
+    else url.searchParams.delete("projeto");
+    history.replaceState(null, "", url);
+  }
+  function openProject(id, tile) {
+    sheetTile = tile;
+    linkProject(id);
     const t = T().work;
     const p = tr(P.find((x) => x.id === id));
     const links = [
       p.links.demo && `<a class="btn btn-accent" href="${esc(p.links.demo)}" target="_blank" rel="noopener">${esc(t.demo)}</a>`,
       p.links.repo && `<a class="btn btn-quiet" href="${esc(p.links.repo)}" target="_blank" rel="noopener">${esc(t.repo)}</a>`,
+      navigator.clipboard && `<button type="button" class="btn btn-quiet" data-copy aria-live="polite">${esc(t.copyLink)}</button>`,
     ].filter(Boolean);
+    const cases = Object.keys(t.caseStudy).filter((k) => p.caseStudy && p.caseStudy[k]);
     const shots = p.images || [];
     const gallery = shots.length
       ? `<figure class="gallery">
@@ -145,19 +258,25 @@
       <p class="meta">${esc(cats()[p.category])}, ${esc((t.kinds[p.kind] || "").toLowerCase())}</p>
       <h3 id="sheetTitle">${esc(p.title)}</h3>
       <p class="desc">${esc(p.description)}</p>
+      ${cases.length ? `<div class="case">${cases.map((k) => `<div><h4>${esc(t.caseStudy[k])}</h4><p>${esc(p.caseStudy[k])}</p></div>`).join("")}</div>` : ""}
       <div class="sheet-cols">
         <div><h4>${esc(t.features)}</h4><ul>${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul></div>
         <div><h4>${esc(t.stack)}</h4><div class="chips">${p.stack.map((s) => `<span>${esc(s)}</span>`).join("")}</div></div>
       </div>
       ${links.length ? `<div class="actions">${links.join("")}</div>` : ""}`;
-    sheet.showModal();
+    showSheet();
   }
   $("#bento").addEventListener("click", (e) => {
     const tile = e.target.closest(".tile");
-    if (tile) openProject(tile.dataset.id);
+    if (tile) openProject(tile.dataset.id, tile);
   });
   // Troca da imagem principal da galeria
   $("#sheetBody").addEventListener("click", (e) => {
+    const copy = e.target.closest("[data-copy]");
+    if (copy) {
+      navigator.clipboard.writeText(location.href).then(() => (copy.textContent = T().work.linkCopied));
+      return;
+    }
     const b = e.target.closest("[data-shot]");
     if (!b) return;
     const main = $("#galleryMain");
@@ -165,8 +284,13 @@
     main.alt = b.getAttribute("aria-label");
     document.querySelectorAll(".thumbs button").forEach((x) => x.setAttribute("aria-pressed", x === b));
   });
-  $("#sheetClose").addEventListener("click", () => sheet.close());
-  sheet.addEventListener("click", (e) => e.target === sheet && sheet.close());
+  $("#sheetClose").addEventListener("click", closeSheet);
+  sheet.addEventListener("click", (e) => e.target === sheet && closeSheet());
+  // Esc também anima; se o navegador forçar o fechamento, o evento "close" limpa o estado
+  sheet.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    closeSheet();
+  });
 
   // ───────── Idioma e tema
   document.querySelectorAll("[data-lang]").forEach((b) =>
@@ -188,4 +312,7 @@
   });
 
   applyStatic();
+
+  const linked = new URLSearchParams(location.search).get("projeto");
+  if (P.some((p) => p.id === linked)) openProject(linked, null);
 })();
