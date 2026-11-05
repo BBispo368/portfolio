@@ -3,7 +3,7 @@
 window.I18N = {
   pt: {
     meta: {
-      title: "Breno Bispo · Portfólio",
+      title: "Breno Bispo · Desenvolvedor full stack e de automação",
       description: "Sistemas web, apps Android e automações sob medida para empresas e clientes.",
     },
     nav: { work: "Projetos", process: "Como trabalho", about: "Sobre", contact: "Contato", theme: "Alternar tema claro/escuro", lang: "Idioma", skip: "Ir para os projetos" },
@@ -28,8 +28,14 @@ window.I18N = {
       shotNote: "Telas reais do sistema, com dados fictícios.",
       shotNoteRecreated: "Telas recriadas a partir do código do app, com dados fictícios.",
       note: "Projetos de empresas e clientes aparecem sem nomes, dados ou código proprietário.",
+      showMore: "Ver mais {n} projetos",
+      showLess: "Mostrar menos",
+      copyLink: "Copiar link do projeto",
+      linkCopied: "Link copiado",
+      caseStudy: { problem: "O problema", solution: "A solução", result: "O resultado", learned: "O que aprendi" },
       kinds: { client: "Cliente", internal: "Uso interno", personal: "Pessoal", study: "Estudo", product: "Produto" },
     },
+    testimonials: { title: "Depoimentos" },
     process: {
       title: "Como trabalho",
       steps: [
@@ -42,6 +48,7 @@ window.I18N = {
     stack: { title: "Ferramentas", intro: "As que mais uso, com o número de projetos em que aparecem.", more: "e mais {n} usadas em projetos pontuais" },
     about: {
       title: "Sobre",
+      cv: "Baixar currículo",
       text: [
         "Sou desenvolvedor full stack e trabalho de ponta a ponta: levanto o problema com quem usa, desenho a solução, desenvolvo, publico e dou suporte.",
         "A maior parte do que construí roda numa operação industrial de verdade: ordens de serviço, compras, fluxo de caixa, painéis de TV na oficina e checklists de veículos. Também faço sites para clientes, apps Android offline e automações em Python e AutoHotkey.",
@@ -69,7 +76,7 @@ window.I18N = {
 
   en: {
     meta: {
-      title: "Breno Bispo · Portfolio",
+      title: "Breno Bispo · Full stack and automation developer",
       description: "Custom web systems, Android apps and automations for companies and clients.",
     },
     nav: { work: "Work", process: "How I work", about: "About", contact: "Contact", theme: "Toggle light/dark theme", lang: "Language", skip: "Skip to projects" },
@@ -94,8 +101,14 @@ window.I18N = {
       shotNote: "Real screens from the system, shown with sample data.",
       shotNoteRecreated: "Screens recreated from the app's source code, shown with sample data.",
       note: "Company and client projects are shown without names, data or proprietary code.",
+      showMore: "See {n} more projects",
+      showLess: "Show less",
+      copyLink: "Copy project link",
+      linkCopied: "Link copied",
+      caseStudy: { problem: "The problem", solution: "The solution", result: "The result", learned: "What I learned" },
       kinds: { client: "Client", internal: "In-house", personal: "Personal", study: "Study", product: "Product" },
     },
+    testimonials: { title: "Testimonials" },
     process: {
       title: "How I work",
       steps: [
@@ -108,6 +121,7 @@ window.I18N = {
     stack: { title: "Tools", intro: "The ones I use most, with the number of projects they appear in.", more: "plus {n} more used in single projects" },
     about: {
       title: "About",
+      cv: "Download résumé",
       text: [
         "I'm a full stack developer who works end to end: I map the problem with the people who live it, design the solution, build it, ship it and support it.",
         "Most of what I've built runs in a real industrial operation: work orders, purchasing, cash flow, shop-floor TV boards and vehicle checklists. I also build websites for clients, offline Android apps and automations in Python and AutoHotkey.",

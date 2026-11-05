@@ -3,14 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Breno Bispo · Portfólio</title>
+  <title>Breno Bispo · Desenvolvedor full stack e de automação</title>
   <meta name="description" content="Sistemas web, apps Android e automações sob medida para empresas e clientes." />
-  <meta property="og:title" content="Breno Bispo · Portfólio" />
+  <meta property="og:title" content="Breno Bispo · Desenvolvedor full stack e de automação" />
   <meta property="og:description" content="Sistemas, apps e automações que tiram empresas da planilha e do papel." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bbispo368.github.io/portfolio/" />
+  <meta property="og:image" content="https://bbispo368.github.io/portfolio/assets/img/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Breno Bispo, desenvolvedor full stack e de automação" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#18181a" />
-  <link rel="alternate" hreflang="pt-BR" href="?lang=pt" />
-  <link rel="alternate" hreflang="en" href="?lang=en" />
+  <link rel="canonical" href="https://bbispo368.github.io/portfolio/?lang=pt" />
+  <link rel="alternate" hreflang="pt-BR" href="https://bbispo368.github.io/portfolio/?lang=pt" />
+  <link rel="alternate" hreflang="en" href="https://bbispo368.github.io/portfolio/?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://bbispo368.github.io/portfolio/" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23ff6a1a'/><text x='50' y='66' font-size='46' text-anchor='middle' fill='%2318181a' font-family='Arial' font-weight='800'>BB</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,7 +38,7 @@
         <a href="#projetos" data-i18n="nav.work"></a>
         <a href="#processo" data-i18n="nav.process"></a>
         <a href="#sobre" data-i18n="nav.about"></a>
-        <a href="#contato" data-i18n="nav.contact"></a>
+        <a href="#contato" class="nav-cta" data-i18n="nav.contact"></a>
       </nav>
       <div class="controls">
         <div class="lang" role="group" data-i18n-aria="nav.lang">
@@ -70,10 +78,18 @@
       </div>
       <div class="tabs" id="filters" role="group"></div>
       <div class="bento" id="bento"></div>
+      <div class="more" id="moreWrap" hidden><button type="button" class="btn btn-quiet" id="moreBtn"></button></div>
       <p class="note" data-i18n="work.note"></p>
     </section>
 
-    <section class="wrap section" id="processo">
+    <section class="wrap section" id="depoimentos" hidden>
+      <div class="section-head">
+        <h2 data-i18n="testimonials.title"></h2>
+      </div>
+      <div class="quotes" id="quotes"></div>
+    </section>
+
+    <section class="wrap section process" id="processo">
       <div class="section-head">
         <h2 data-i18n="process.title"></h2>
       </div>
@@ -92,6 +108,8 @@
       <div>
         <h2 data-i18n="about.title"></h2>
         <div class="about-text" id="aboutText"></div>
+        <ol class="timeline" id="timeline" hidden></ol>
+        <div class="actions" id="cvAction" hidden></div>
       </div>
       <div class="faq">
         <h2 data-i18n="faq.title"></h2>

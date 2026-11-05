@@ -1,6 +1,7 @@
 // Fonte única dos projetos do portfólio.
 // Campos: id, kind (client|internal|personal|study|product), title, category (chave de CATEGORIES), summary, description, features[], stack[],
-//         highlight (aparece primeiro), links { repo, demo }, images[] (prints; o 1º vira capa), shotsRecreated (telas recriadas), icon (emoji)
+//         highlight (aparece primeiro), links { repo, demo }, images[] (prints; o 1º vira capa), shotsRecreated (telas recriadas), icon (emoji),
+//         caseStudy { problem, solution, result, learned } (opcional; cada campo vazio fica oculto, e a tradução vai em projects.en.js)
 window.CATEGORIES = {
   web: "Web: clientes e pessoais",
   corp: "Sistemas empresariais",
