@@ -1,46 +1,97 @@
-# Portfólio — Breno Bispo
+# Breno Bispo · Portfólio
 
-Site estático (HTML/CSS/JS puro, sem build), em português e inglês. Basta abrir `index.html` no navegador.
+Portfólio de **Breno Bispo**, desenvolvedor full stack e de automação. Reúne 26 projetos entre sistemas internos para empresas, sites para clientes, apps Android e automações, com versões em português e inglês.
 
-## Editar
-- **Dados pessoais e contatos:** `js/config.js` (campos vazios ficam ocultos; `photo` aceita `assets/img/sua-foto.jpg`).
-- **Currículo, trajetória e depoimentos:** `cv`, `timeline` e `testimonials` em `js/config.js`, com exemplos nos comentários. Só aparecem quando preenchidos.
-- **Estudo de caso:** `caseStudy` no projeto em `js/projects.js`, com a tradução em `js/projects.en.js`.
-- **Textos da página (PT e EN):** `js/i18n.js` — mesma estrutura nos dois idiomas.
-- **Projetos (PT):** `js/projects.js` — `kind` = client | internal | personal | study | product; `highlight: true` coloca no topo.
-- **Projetos (EN):** `js/projects.en.js` — mesma `id` do projeto em PT. Ao criar um projeto, adicione a tradução também.
-- **Ferramentas com ícone:** `js/tools.js` — `name` igual ao usado em `stack` dos projetos; `group` = web | data | mobile | auto. Ícones do [Simple Icons](https://simpleicons.org) (CC0); as demais ferramentas aparecem em texto.
-- **Capturas de tela:** salve em `assets/img/` e preencha `image` no projeto.
-- **Cores/tipografia:** tokens no topo de `css/style.css`.
+**[Ver o site →](https://bbispo368.github.io/portfolio/)**
 
-## Currículo (LaTeX)
-Fontes em `cv/`: `breno-bispo-pt.tex`, `breno-bispo-en.tex` e o estilo compartilhado `estilo.tex`. Trechos com `\preencher{...}` aparecem destacados em laranja no PDF e precisam ser trocados antes de publicar.
+![Prévia do portfólio](assets/img/og.jpg)
 
-Para gerar os PDFs com pdfLaTeX (MiKTeX ou TeX Live):
-```bash
-cd cv
-pdflatex -output-directory=../assets/cv breno-bispo-pt.tex
-pdflatex -output-directory=../assets/cv breno-bispo-en.tex
-```
-Sem LaTeX instalado, envie os três arquivos ao Overleaf e compile com pdfLaTeX. Depois, preencha `cv` em `js/config.js` com `assets/cv/breno-bispo-pt.pdf` e `assets/cv/breno-bispo-en.pdf` para o botão aparecer no site.
+## Destaques
 
-## Idioma
-Botões PT/EN no topo. Links diretos: `?lang=pt` e `?lang=en`. Sem parâmetro, usa a última escolha ou o idioma do navegador.
+- **Bilíngue:** português e inglês, escolhidos pela URL (`?lang=pt` ou `?lang=en`), pela última escolha do visitante ou pelo idioma do navegador.
+- **Projetos navegáveis:** grade com filtros por categoria e um painel de detalhes com galeria de telas. Cada projeto tem um link direto, como `?projeto=crm-vendas`.
+- **Tema claro e escuro**, com a escolha salva no navegador.
+- **Interação cuidada:** resposta imediata ao toque, painel que abre a partir do card clicado e respeito à preferência do sistema por menos movimento (`prefers-reduced-motion`).
+- **Sem dependências nem build:** HTML, CSS e JavaScript puros, prontos para qualquer hospedagem estática.
+- **SEO básico:** Open Graph, `canonical`, `hreflang` e `sitemap.xml`.
 
-## Link direto para um projeto
-`?projeto=id` abre o projeto, por exemplo `?projeto=crm-vendas&lang=en`.
+> Projetos feitos para empresas e clientes aparecem sem nomes, dados ou código proprietário. As capturas de tela usam dados fictícios.
 
-## Publicar (GitHub Pages)
-1. Crie o repositório `portfolio` em github.com/BBispo368 e envie esta pasta.
-2. Settings → Pages → Branch `main` / root.
-3. O site fica em `https://bbispo368.github.io/portfolio/`.
+## Tecnologias
 
-Ao trocar para um domínio próprio, atualize o endereço em `index.html`, `sitemap.xml` e `robots.txt`. Até lá, envie o `sitemap.xml` pelo Google Search Console: buscadores só leem `robots.txt` na raiz do domínio, então o arquivo em `/portfolio/` não tem efeito.
+| Parte | Escolha |
+|---|---|
+| Estrutura e estilo | HTML e CSS, com variáveis CSS para os temas |
+| Comportamento | JavaScript sem frameworks |
+| Tipografia | [Geist](https://vercel.com/font), via Google Fonts |
+| Ícones das ferramentas | [Simple Icons](https://simpleicons.org) |
+| Hospedagem | GitHub Pages |
 
-## Trabalhar em mais de um computador
-Primeira vez em um computador novo:
+## Rodando localmente
+
 ```bash
 git clone https://github.com/BBispo368/portfolio.git
+cd portfolio
 ```
-Ao começar a trabalhar: `git pull`
-Ao terminar: `git add . && git commit -m "o que mudou" && git push`
+
+Abra o `index.html` direto no navegador ou, para simular a hospedagem, sirva a pasta com qualquer servidor estático:
+
+```bash
+python -m http.server 8080
+```
+
+E acesse `http://localhost:8080`.
+
+## Estrutura
+
+```
+├── index.html          Página única, com as seções e as meta tags
+├── css/style.css       Estilos, com os tokens de cor e tipografia no topo
+├── js/
+│   ├── config.js       Dados pessoais, contatos, currículo, trajetória e depoimentos
+│   ├── i18n.js         Textos da página em PT e EN
+│   ├── projects.js     Projetos em português
+│   ├── projects.en.js  Traduções dos projetos para o inglês
+│   ├── tools.js        Ferramentas exibidas com ícone, agrupadas por área
+│   └── main.js         Renderização, filtros, painel, idioma e tema
+├── assets/img/         Foto, imagem de compartilhamento e telas dos projetos
+├── sitemap.xml
+└── robots.txt
+```
+
+## Como o conteúdo é organizado
+
+Todo o conteúdo fica em arquivos de dados, separado do código. Mudar um texto ou incluir um projeto não exige mexer no `main.js`.
+
+| Para mudar | Edite |
+|---|---|
+| Nome, foto e contatos | `js/config.js`. Campos vazios ficam ocultos no site. |
+| Currículo, trajetória e depoimentos | `cv`, `timeline` e `testimonials` em `js/config.js`. Só aparecem quando preenchidos. |
+| Textos da página | `js/i18n.js`, com a mesma estrutura nos dois idiomas. |
+| Projetos | `js/projects.js`. O campo `kind` aceita `client`, `internal`, `personal`, `study` ou `product`, e `highlight: true` coloca o projeto entre os destaques. |
+| Tradução dos projetos | `js/projects.en.js`, usando o mesmo `id` do projeto em português. |
+| Estudo de caso de um projeto | `caseStudy` com `problem`, `solution`, `result` e `learned`. Cada campo vazio fica oculto. |
+| Ferramentas com ícone | `js/tools.js`. O `name` precisa ser igual ao usado em `stack` nos projetos. |
+| Cores e tipografia | Variáveis no topo de `css/style.css`. |
+
+Os números da seção "Sobre" e a lista de ferramentas são calculados a partir dos projetos, então se atualizam sozinhos.
+
+## Publicação
+
+O site é publicado pelo GitHub Pages a partir da branch `main`. Para publicar uma cópia:
+
+1. Em **Settings → Pages**, escolha a branch `main` e a pasta raiz (`/ (root)`).
+2. Atualize o endereço do site em `index.html` (`canonical`, `hreflang` e `og:*`), em `sitemap.xml` e em `robots.txt`.
+
+Os buscadores só leem o `robots.txt` na raiz do domínio. Num endereço como `usuario.github.io/portfolio/`, envie o `sitemap.xml` pelo Google Search Console.
+
+## Créditos
+
+- Ícones: [Simple Icons](https://simpleicons.org), sob licença CC0. As marcas pertencem aos seus donos.
+- Fonte: [Geist](https://vercel.com/font), da Vercel, sob a SIL Open Font License.
+
+## Contato
+
+- **Site:** [bbispo368.github.io/portfolio](https://bbispo368.github.io/portfolio/)
+- **LinkedIn:** [breno-bispo-5745411a8](https://www.linkedin.com/in/breno-bispo-5745411a8)
+- **GitHub:** [@BBispo368](https://github.com/BBispo368)
