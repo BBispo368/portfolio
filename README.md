@@ -9,8 +9,20 @@ Site estático (HTML/CSS/JS puro, sem build), em português e inglês. Basta abr
 - **Textos da página (PT e EN):** `js/i18n.js` — mesma estrutura nos dois idiomas.
 - **Projetos (PT):** `js/projects.js` — `kind` = client | internal | personal | study | product; `highlight: true` coloca no topo.
 - **Projetos (EN):** `js/projects.en.js` — mesma `id` do projeto em PT. Ao criar um projeto, adicione a tradução também.
+- **Ferramentas com ícone:** `js/tools.js` — `name` igual ao usado em `stack` dos projetos; `group` = web | data | mobile | auto. Ícones do [Simple Icons](https://simpleicons.org) (CC0); as demais ferramentas aparecem em texto.
 - **Capturas de tela:** salve em `assets/img/` e preencha `image` no projeto.
 - **Cores/tipografia:** tokens no topo de `css/style.css`.
+
+## Currículo (LaTeX)
+Fontes em `cv/`: `breno-bispo-pt.tex`, `breno-bispo-en.tex` e o estilo compartilhado `estilo.tex`. Trechos com `\preencher{...}` aparecem destacados em laranja no PDF e precisam ser trocados antes de publicar.
+
+Para gerar os PDFs com pdfLaTeX (MiKTeX ou TeX Live):
+```bash
+cd cv
+pdflatex -output-directory=../assets/cv breno-bispo-pt.tex
+pdflatex -output-directory=../assets/cv breno-bispo-en.tex
+```
+Sem LaTeX instalado, envie os três arquivos ao Overleaf e compile com pdfLaTeX. Depois, preencha `cv` em `js/config.js` com `assets/cv/breno-bispo-pt.pdf` e `assets/cv/breno-bispo-en.pdf` para o botão aparecer no site.
 
 ## Idioma
 Botões PT/EN no topo. Links diretos: `?lang=pt` e `?lang=en`. Sem parâmetro, usa a última escolha ou o idioma do navegador.
