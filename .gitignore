@@ -5,3 +5,10 @@ node_modules/
 .env
 .env.*
 *.log
+
+# LaTeX
+*.aux
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz

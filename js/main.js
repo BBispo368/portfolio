@@ -53,6 +53,8 @@
     $("#aboutText").innerHTML = t.about.text.map((p) => `<p>${esc(p)}</p>`).join("");
     $("#faqList").innerHTML = t.faq.items.map((f) => `<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("");
     $("#steps").innerHTML = t.process.steps.map((s) => `<li><h3>${esc(s.name)}</h3><p>${esc(s.text)}</p></li>`).join("");
+    renderServices();
+    renderStats();
     renderTimeline();
     renderTestimonials();
     renderContact();
@@ -82,6 +84,43 @@
     const action = $("#cvAction");
     action.hidden = !cv;
     action.innerHTML = cv ? `<a class="btn btn-quiet" href="${esc(cv)}" download>${esc(T().about.cv)}</a>` : "";
+    const heroCv = $("#heroCv");
+    heroCv.hidden = !cv;
+    if (cv) {
+      heroCv.href = cv;
+      heroCv.textContent = T().about.cv;
+    }
+  }
+
+  // Tipos de trabalho, cada um com projetos de exemplo que abrem o painel
+  function renderServices() {
+    const t = T().services;
+    $("#services").innerHTML = t.items
+      .map((s) => {
+        const examples = s.projects.map((id) => P.find((p) => p.id === id)).filter(Boolean).map(tr);
+        return `<article><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p>${
+          examples.length ? `<p class="examples"><span>${esc(t.examples)}</span>${examples.map((p) => `<button type="button" data-open="${p.id}">${esc(p.title)}</button>`).join("")}</p>` : ""
+        }</article>`;
+      })
+      .join("");
+  }
+  $("#services").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-open]");
+    if (b) openProject(b.dataset.open, b);
+  });
+
+  // Números do "Sobre", sempre calculados a partir dos projetos
+  function renderStats() {
+    const s = T().about.stats;
+    const values = {
+      projects: P.length,
+      internal: P.filter((p) => p.kind === "internal").length,
+      clients: P.filter((p) => p.kind === "client").length,
+      tools: techs.length,
+    };
+    $("#stats").innerHTML = Object.keys(s)
+      .map((k) => `<div><dt>${values[k]}</dt><dd>${esc(s[k])}</dd></div>`)
+      .join("");
   }
   function renderTestimonials() {
     const items = C.testimonials || [];
@@ -93,27 +132,44 @@
 
   function renderContact() {
     const t = T().contact;
+    const short = (url) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+    const phone = (n) => n.replace(/^(\d{2})(\d{2})(\d{4,5})(\d{4})$/, "+$1 $2 $3-$4");
     const items = [
-      C.whatsapp && [t.whatsapp, `https://wa.me/${C.whatsapp}`, "btn-accent"],
-      C.email && [t.email, `mailto:${C.email}?subject=${encodeURIComponent(t.mailSubject)}`, C.whatsapp ? "btn-quiet" : "btn-accent"],
-      C.linkedin && ["LinkedIn", C.linkedin, "btn-quiet"],
-      C.github && ["GitHub", C.github, "btn-quiet"],
+      C.whatsapp && ["WhatsApp", phone(C.whatsapp), t.channels.whatsapp, `https://wa.me/${C.whatsapp}`],
+      C.email && ["E-mail", C.email, t.channels.email, `mailto:${C.email}?subject=${encodeURIComponent(t.mailSubject)}`],
+      C.linkedin && ["LinkedIn", short(C.linkedin), t.channels.linkedin, C.linkedin],
+      C.github && ["GitHub", short(C.github), t.channels.github, C.github],
     ].filter(Boolean);
+    const external = (href) => (href.startsWith("http") ? ' target="_blank" rel="noopener"' : "");
     $("#contactActions").innerHTML = items
-      .map(([label, href, cls]) => `<a class="btn ${cls}" href="${esc(href)}"${href.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>${esc(label)}</a>`)
+      .map(([name, value, hint, href]) => `<a class="channel" href="${esc(href)}"${external(href)}><span class="channel-name">${esc(name)}</span><span class="channel-value">${esc(value)}</span><span class="channel-hint">${esc(hint)}</span></a>`)
       .join("");
+    $("#footerContact").innerHTML = items.map(([name, , , href]) => `<li><a href="${esc(href)}"${external(href)}>${esc(name)}</a></li>`).join("");
   }
 
-  // ───────── Ferramentas: só as usadas em 2+ projetos
+  // ───────── Ferramentas: as principais (js/tools.js) com ícone por área; das demais, só as usadas em 2+ projetos
   const techCount = {};
   P.forEach((p) => p.stack.forEach((t) => (techCount[t] = (techCount[t] || 0) + 1)));
   const techs = Object.entries(techCount).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const mainTechs = techs.filter(([, n]) => n > 1);
+  const featured = window.TOOLS.filter((x) => techCount[x.name]).sort((a, b) => techCount[b.name] - techCount[a.name]);
+  const others = techs.filter(([t, n]) => n > 1 && !featured.some((x) => x.name === t));
   function renderTools() {
-    const rest = techs.length - mainTechs.length;
-    $("#tools").innerHTML =
-      mainTechs.map(([t, n], i) => `<li class="${i < 5 ? "top" : ""}">${esc(t)}<b>${n}</b></li>`).join("") +
-      (rest ? `<li class="more">${esc(fill(T().stack.more, { n: rest }))}</li>` : "");
+    const t = T().stack;
+    const count = (n) => fill(n === 1 ? t.project : t.projects, { n });
+    $("#tools").innerHTML = Object.keys(t.groups)
+      .map((g) => {
+        const items = featured.filter((x) => x.group === g);
+        if (!items.length) return "";
+        return `<div class="tool-group"><h3>${esc(t.groups[g])}</h3><ul>${items
+          .map((x) => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${esc(x.icon)}"/></svg><span>${esc(x.name)}</span><span class="n">${esc(count(techCount[x.name]))}</span></li>`)
+          .join("")}</ul></div>`;
+      })
+      .join("");
+    const rest = techs.length - featured.length - others.length;
+    $("#toolsMore").innerHTML =
+      `<span class="label">${esc(t.also)}</span>` +
+      others.map(([x]) => `<span>${esc(x)}</span>`).join("") +
+      (rest ? `<span class="more">${esc(fill(t.more, { n: rest }))}</span>` : "");
   }
 
   // ───────── Filtros

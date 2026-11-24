@@ -35,6 +35,17 @@ window.I18N = {
       caseStudy: { problem: "O problema", solution: "A solução", result: "O resultado", learned: "O que aprendi" },
       kinds: { client: "Cliente", internal: "Uso interno", personal: "Pessoal", study: "Estudo", product: "Produto" },
     },
+    services: {
+      title: "O que eu faço",
+      intro: "Quatro tipos de trabalho, com exemplos reais do portfólio.",
+      examples: "Exemplos:",
+      items: [
+        { title: "Sistemas sob medida", text: "Sistemas web para rotinas específicas da empresa: ordens de serviço, compras, fluxo de caixa, inventário e atendimento.", projects: ["controle-os", "requisicoes", "hub-comercial"] },
+        { title: "Apps Android", text: "Apps nativos em Kotlin com Jetpack Compose, inclusive 100% offline, com câmera e reconhecimento facial.", projects: ["fichas-faciais", "vistoria-android"] },
+        { title: "Automação e integração", text: "Robôs de coleta, leitura de relatórios do ERP, integração com WhatsApp e automações de rotina em Python e AutoHotkey.", projects: ["fluxo-caixa", "chat-whatsapp", "suite-ahk"] },
+        { title: "Sites", text: "Sites para clientes e empresas, com blog otimizado para buscadores e painel para editar o conteúdo.", projects: ["redwings", "site-institucional"] },
+      ],
+    },
     testimonials: { title: "Depoimentos" },
     process: {
       title: "Como trabalho",
@@ -45,10 +56,19 @@ window.I18N = {
         { name: "Acompanhar", text: "Publico, treino a equipe e acompanho o uso para corrigir e evoluir." },
       ],
     },
-    stack: { title: "Ferramentas", intro: "As que mais uso, com o número de projetos em que aparecem.", more: "e mais {n} usadas em projetos pontuais" },
+    stack: {
+      title: "Ferramentas",
+      intro: "As principais, por área, com o número de projetos em que aparecem.",
+      groups: { web: "Web", data: "Back-end e dados", mobile: "Mobile", auto: "Desktop e automação" },
+      project: "1 projeto",
+      projects: "{n} projetos",
+      also: "Também uso",
+      more: "e mais {n} usadas em projetos pontuais",
+    },
     about: {
       title: "Sobre",
       cv: "Baixar currículo",
+      stats: { projects: "projetos no portfólio", internal: "projetos de uso interno", clients: "projetos para clientes", tools: "tecnologias usadas" },
       text: [
         "Sou desenvolvedor full stack e trabalho de ponta a ponta: levanto o problema com quem usa, desenho a solução, desenvolvo, publico e dou suporte.",
         "A maior parte do que construí roda numa operação industrial de verdade: ordens de serviço, compras, fluxo de caixa, painéis de TV na oficina e checklists de veículos. Também faço sites para clientes, apps Android offline e automações em Python e AutoHotkey.",
@@ -67,11 +87,10 @@ window.I18N = {
     contact: {
       title: "Tem um processo travando sua equipe?",
       text: "Me conte o problema. Respondo com perguntas e uma proposta inicial. Também estou aberto a vagas como desenvolvedor.",
-      email: "Enviar e-mail",
-      whatsapp: "Chamar no WhatsApp",
+      channels: { whatsapp: "Resposta mais rápida", email: "Para propostas e materiais", linkedin: "Trajetória profissional", github: "Código dos projetos públicos" },
       mailSubject: "Novo projeto",
     },
-    footer: { top: "Voltar ao topo" },
+    footer: { top: "Voltar ao topo", nav: "Navegação", contact: "Contato" },
   },
 
   en: {
@@ -108,6 +127,17 @@ window.I18N = {
       caseStudy: { problem: "The problem", solution: "The solution", result: "The result", learned: "What I learned" },
       kinds: { client: "Client", internal: "In-house", personal: "Personal", study: "Study", product: "Product" },
     },
+    services: {
+      title: "What I do",
+      intro: "Four kinds of work, with real examples from the portfolio.",
+      examples: "Examples:",
+      items: [
+        { title: "Custom systems", text: "Web systems for a company's specific routines: work orders, purchasing, cash flow, inventory and customer service.", projects: ["controle-os", "requisicoes", "hub-comercial"] },
+        { title: "Android apps", text: "Native apps in Kotlin with Jetpack Compose, including fully offline ones with camera and face recognition.", projects: ["fichas-faciais", "vistoria-android"] },
+        { title: "Automation and integration", text: "Data-collection bots, ERP report reading, WhatsApp integration and routine automations in Python and AutoHotkey.", projects: ["fluxo-caixa", "chat-whatsapp", "suite-ahk"] },
+        { title: "Websites", text: "Websites for clients and companies, with a search-optimized blog and a panel to edit the content.", projects: ["redwings", "site-institucional"] },
+      ],
+    },
     testimonials: { title: "Testimonials" },
     process: {
       title: "How I work",
@@ -118,10 +148,19 @@ window.I18N = {
         { name: "Support", text: "I ship it, train the team and follow up to fix and improve." },
       ],
     },
-    stack: { title: "Tools", intro: "The ones I use most, with the number of projects they appear in.", more: "plus {n} more used in single projects" },
+    stack: {
+      title: "Tools",
+      intro: "The main ones, by area, with the number of projects they appear in.",
+      groups: { web: "Web", data: "Back end and data", mobile: "Mobile", auto: "Desktop and automation" },
+      project: "1 project",
+      projects: "{n} projects",
+      also: "Also used",
+      more: "plus {n} more used in single projects",
+    },
     about: {
       title: "About",
       cv: "Download résumé",
+      stats: { projects: "projects in the portfolio", internal: "in-house projects", clients: "client projects", tools: "technologies used" },
       text: [
         "I'm a full stack developer who works end to end: I map the problem with the people who live it, design the solution, build it, ship it and support it.",
         "Most of what I've built runs in a real industrial operation: work orders, purchasing, cash flow, shop-floor TV boards and vehicle checklists. I also build websites for clients, offline Android apps and automations in Python and AutoHotkey.",
@@ -140,10 +179,9 @@ window.I18N = {
     contact: {
       title: "Is a process holding your team back?",
       text: "Tell me about the problem. I'll reply with questions and an initial proposal. I'm also open to developer roles.",
-      email: "Send an email",
-      whatsapp: "Message on WhatsApp",
+      channels: { whatsapp: "Fastest reply", email: "For proposals and materials", linkedin: "Career history", github: "Code for public projects" },
       mailSubject: "New project",
     },
-    footer: { top: "Back to top" },
+    footer: { top: "Back to top", nav: "Navigation", contact: "Contact" },
   },
 };
